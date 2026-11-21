@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: teamlink_stage1
+      POSTGRES_USER: teamlink
+      POSTGRES_PASSWORD: change_me
+    ports:
+      - "5433:5432"
+    volumes:
+      - teamlink_stage1_pg:/var/lib/postgresql/data
+volumes:
+  teamlink_stage1_pg:
