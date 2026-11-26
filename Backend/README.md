@@ -2,7 +2,7 @@
 
 ## .NET SDK version
 
-The author of this structure used .NET SDK 9.0.305.
+The author of this structure used .NET SDK 11.0.100.
 
 ## Build and run
 
