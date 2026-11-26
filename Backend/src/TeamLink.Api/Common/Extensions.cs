@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
+using TeamLink.Api.Data;
 
 namespace TeamLink.Api.Common;
 
@@ -14,7 +15,13 @@ public static class Extensions
         IConfiguration configuration)
     {
         services.AddControllers();
-        // Load typed configuration options and register services here.
+        
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(connectionString));
+
         return services;
     }
 
