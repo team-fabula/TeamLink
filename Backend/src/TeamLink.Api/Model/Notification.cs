@@ -5,6 +5,7 @@ using TeamLink.Api.Schema.Enum;
 
 namespace TeamLink.Api.Model;
 
+[Table("Notifications")]
 [Index(nameof(RecipientId), nameof(IsRead), nameof(CreatedAt))]
 public sealed class Notification
 {

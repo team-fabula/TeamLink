@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TeamLink.Api.Model;
 
+[Table("MessageReceipts")]
 [Index(nameof(MessageId), nameof(UserId), IsUnique = true)]
 [Index(nameof(UserId))]
 public sealed class MessageReceipt

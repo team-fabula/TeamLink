@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TeamLink.Api.Model;
 
+[Table("Users")]
 [Index(nameof(Email), IsUnique = true)]
 public sealed class User
 {

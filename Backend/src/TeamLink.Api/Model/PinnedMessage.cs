@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TeamLink.Api.Model;
 
+[Table("PinnedMessages")]
 [Index(nameof(MessageId), IsUnique = true)]
 public sealed class PinnedMessage
 {

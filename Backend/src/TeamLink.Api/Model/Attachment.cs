@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TeamLink.Api.Model;
 
+[Table("Attachments")]
 [Index(nameof(MessageId))]
 public sealed class Attachment
 {
@@ -18,6 +19,7 @@ public sealed class Attachment
     [Required]
     public required string MimeType { get; set; }
 
+    [Range(0, long.MaxValue)]
     public long SizeBytes { get; set; }
 
     [Required]

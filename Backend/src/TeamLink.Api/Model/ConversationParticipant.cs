@@ -5,6 +5,7 @@ using TeamLink.Api.Schema.Enum;
 
 namespace TeamLink.Api.Model;
 
+[Table("ConversationParticipants")]
 [Index(nameof(ConversationId), nameof(UserId), IsUnique = true)]
 [Index(nameof(UserId))]
 public sealed class ConversationParticipant

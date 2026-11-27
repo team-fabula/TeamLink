@@ -1,6 +1,8 @@
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamLink.Api.Data;
 
 namespace TeamLink.Api.Common;
@@ -47,5 +49,17 @@ public static class Extensions
         });
 
         return app;
+    }
+
+    public static void HasEnumCheckConstraint<TEntity, TEnum>(this EntityTypeBuilder<TEntity> builder, string columnName)
+        where TEntity : class
+        where TEnum : struct, Enum
+    {
+        var tableName = builder.Metadata.GetTableName();
+        var allowedValues = string.Join(", ", Enum.GetNames<TEnum>().Select(v => $"'{v}'"));
+        var constraintName = $"CK_{tableName}_{columnName}";
+        var sql = $"\"{columnName}\" IN ({allowedValues})";
+
+        builder.ToTable(table => table.HasCheckConstraint(constraintName, sql));
     }
 }

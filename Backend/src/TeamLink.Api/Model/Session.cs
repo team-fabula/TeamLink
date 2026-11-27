@@ -5,6 +5,7 @@ using TeamLink.Api.Schema.Enum;
 
 namespace TeamLink.Api.Model;
 
+[Table("Sessions")]
 [Index(nameof(UserId), nameof(ExpiresAt))]
 public sealed class Session
 {

@@ -5,15 +5,15 @@ using TeamLink.Api.Schema.Enum;
 
 namespace TeamLink.Api.Model;
 
-[Index(nameof(MessageId))]
-[Index(nameof(UserId))]
+[Table("Reactions")]
+[Index(nameof(MessageId), nameof(UserId), IsUnique = true)]
 public sealed class Reaction
 {
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();
 
     public Guid MessageId { get; set; }
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
     public ReactionType ReactionType { get; set; }
     public DateTime CreatedAt { get; set; }
 
@@ -23,5 +23,5 @@ public sealed class Reaction
 
     [ForeignKey(nameof(UserId))]
     [InverseProperty(nameof(User.Reactions))]
-    public User User { get; set; } = null!;
+    public User? User { get; set; }
 }

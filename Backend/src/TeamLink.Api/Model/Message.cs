@@ -5,6 +5,7 @@ using TeamLink.Api.Schema.Enum;
 
 namespace TeamLink.Api.Model;
 
+[Table("Messages")]
 [Index(nameof(ConversationId), nameof(CreatedAt))]
 [Index(nameof(SenderId))]
 public sealed class Message
@@ -13,7 +14,7 @@ public sealed class Message
     public Guid Id { get; set; } = Guid.NewGuid();
 
     public Guid ConversationId { get; set; }
-    public Guid SenderId { get; set; }
+    public Guid? SenderId { get; set; }
     public MessageType Type { get; set; }
 
     [Column(TypeName = "text")]
@@ -30,7 +31,7 @@ public sealed class Message
 
     [ForeignKey(nameof(SenderId))]
     [InverseProperty(nameof(User.SentMessages))]
-    public User Sender { get; set; } = null!;
+    public User? Sender { get; set; }
 
     [InverseProperty(nameof(Attachment.Message))]
     public ICollection<Attachment> Attachments { get; } = [];

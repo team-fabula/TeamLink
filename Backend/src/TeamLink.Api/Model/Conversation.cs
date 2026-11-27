@@ -5,6 +5,7 @@ using TeamLink.Api.Schema.Enum;
 
 namespace TeamLink.Api.Model;
 
+[Table("Conversations")]
 [Index(nameof(LastMessageAt))]
 public sealed class Conversation
 {
@@ -14,13 +15,13 @@ public sealed class Conversation
     public ConversationType Type { get; set; }
     public string? Name { get; set; }
     public string? AvatarUrl { get; set; }
-    public Guid CreatedById { get; set; }
+    public Guid? CreatedById { get; set; }
     public DateTime? LastMessageAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
     [ForeignKey(nameof(CreatedById))]
     [InverseProperty(nameof(User.CreatedConversations))]
-    public User CreatedBy { get; set; } = null!;
+    public User? CreatedBy { get; set; }
 
     [InverseProperty(nameof(ConversationParticipant.Conversation))]
     public ICollection<ConversationParticipant> Participants { get; } = [];
