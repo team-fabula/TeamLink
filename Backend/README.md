@@ -24,7 +24,7 @@ dotnet run
 
 Set `ConnectionStrings__DefaultConnection` in the .env file or in the current PowerShell session before running the application.
 
-On startup, the API applies all pending Entity Framework Core migrations automatically. If PostgreSQL is unavailable or migration fails, startup fails with the database error.
+On startup, the API applies all pending Entity Framework Core migrations automatically. If PostgreSQL is unavailable or migration fails, startup fails with the database error. You need to install `pg_trgm` extension in the database to use the message-search index (Docker Compose ensures this).
 
 To migrate the database manually, run the following commands in the **Backend** folder.
 
