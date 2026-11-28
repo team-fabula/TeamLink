@@ -1,6 +1,9 @@
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TeamLink.Api.Data;
 
 namespace TeamLink.Api.Common;
 
@@ -14,8 +17,21 @@ public static class Extensions
         IConfiguration configuration)
     {
         services.AddControllers();
-        // Load typed configuration options and register services here.
+        
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(connectionString));
+
         return services;
+    }
+
+    public static async Task ApplyDatabaseMigrationsAsync(this WebApplication app)
+    {
+        await using var scope = app.Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
     }
 
     public static WebApplication UseCommonMiddleware(this WebApplication app)
@@ -40,5 +56,17 @@ public static class Extensions
         });
 
         return app;
+    }
+
+    public static void HasEnumCheckConstraint<TEntity, TEnum>(this EntityTypeBuilder<TEntity> builder, string columnName)
+        where TEntity : class
+        where TEnum : struct, Enum
+    {
+        var tableName = builder.Metadata.GetTableName();
+        var allowedValues = string.Join(", ", Enum.GetNames<TEnum>().Select(v => $"'{v}'"));
+        var constraintName = $"CK_{tableName}_{columnName}";
+        var sql = $"\"{columnName}\" IN ({allowedValues})";
+
+        builder.ToTable(table => table.HasCheckConstraint(constraintName, sql));
     }
 }
